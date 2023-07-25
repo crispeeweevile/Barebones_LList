@@ -15,7 +15,7 @@ struct Node {
     //int index;
     struct Data *nData;
     struct Node *next;
-    struct node *prev;
+    struct Node *prev;
 };
 
 struct Data *new_data(int _money, int _items, int _debt);
