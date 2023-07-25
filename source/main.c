@@ -31,7 +31,7 @@ int main() {
         int index = 0;
         do {
             struct Data *cData = (*myll).nData;
-            //printf("Index: %d, Money: %d, Items: %d, Debt: %d\n", index, (*cData).Money, (*cData).Items, (*cData).Debt);
+            printf("Index: %d, Money: %d, Items: %d, Debt: %d\n", index, (*cData).Money, (*cData).Items, (*cData).Debt);
             derr = goto_next(&myll);
             if (derr==METHOD_FAILED) {
                 printf("goto_next has failed. loopn: %d", index+1);
@@ -43,7 +43,7 @@ int main() {
         
 
         free_list(&myll, true);
-        //millisleep(10000);
+        millisleep(10000);
     }
     return 0;
 }
