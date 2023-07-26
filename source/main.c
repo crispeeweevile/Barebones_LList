@@ -44,7 +44,6 @@ int main() {
             }
             index++;
         } while ((*myll).next!=NULL);
-        printf("made it to lin47\n");
 
         // goto_last & goto_prev test
         goto_last(&myll);
@@ -56,19 +55,15 @@ int main() {
                 break;
             }
         } while ((*myll).prev!=NULL);
-        printf("made it to lin59\n");
         {
             // test removing an item and freeing it.
             struct Data *tmp;
             struct Node *remd = remove_item(&myll, &tmp);
             free_node(&remd, false);
-            printf("oh you want no data too?\n");
             free_data(&tmp);
         }
-        printf("made it to lin69\n");
         // free_list, free_node, and free_data test
         free_list(&myll, true);
-        printf("made it to lin70\n");
         //millisleep(10000);
     //}
 

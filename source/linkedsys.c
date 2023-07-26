@@ -12,13 +12,9 @@ struct Data *new_data(int _money, int _items, int _debt) {
 }
 
 error free_data(struct Data **data) {
-    printf("surely you didn't give bad data lol\n");
     if (!data) return FFAILURE;
-    printf("surely you didn't give bad data lol (agin?)\n");
-    if (!(*data)) return FFAILURE;
-    printf("valid data 2 free?\n");
+    if (!data || !(*data)) return FFAILURE;
     free(*data);
-    printf("fine i guess ill remove ur data\n");
     (*data) = NULL;
     return FSUCCESS;
 }
@@ -42,19 +38,24 @@ struct Node *create_item(struct Data *data) {
     return new_list(data);
 }
 
-error free_node(struct Node **llnode, bool _free_data) {
+/*error free_node(struct Node **llnode, bool _free_data) {
     if (llnode == NULL) return FFAILURE;
     if ((*llnode) == NULL) return FFAILURE;
-    printf("at least you gave valid data. lol\n");
     if (_free_data) {
-        printf("death by data free?\n");
-        free_data((&(*llnode)->nData));
-        printf("no more data\n");
+        free_data(&((*llnode)->nData));
     }
-    printf("death by free\n");
     free(*llnode);
-    printf("why no wrk?\n");
     //(*llnode) = NULL;
+    return FSUCCESS;
+}*/
+
+error free_node(struct Node **llnode, bool _free_data) {
+    if (llnode == NULL || *llnode == NULL) return FFAILURE;
+    if (_free_data) {
+        free_data(&((*llnode)->nData));
+    }
+    free(*llnode);
+    *llnode = NULL;
     return FSUCCESS;
 }
 
@@ -62,26 +63,21 @@ error free_list(struct Node **llnode, bool _free_data) {
     if (llnode == NULL) return FFAILURE;
     if ((*llnode) == NULL) return FFAILURE;
 
-    printf("the start\n");
-    goto_first(&(*llnode));
-    struct Node *prevprev;
+    goto_last(&(*llnode));
+    if ((*llnode)->next==NULL) {
+        abort();
+    }
     while ((**llnode).next != NULL) {
-        printf("slugma\n");
-        goto_next(&(*llnode));
-        printf("here. . .\n");
+        if (goto_next(llnode)==METHOD_FAILED) break;
         struct Node *prev = (**llnode).prev;
-        printf("there. . .\n");
-        free_node((&prev), _free_data);
-        printf("loopindeez\n");
+        //free_node((&prev), _free_data);
     }
 
     if (llnode != NULL) {
         if ((*llnode) != NULL) {
-            printf("freecur\n");
             free_node((&(*llnode)), _free_data);
         }
     }
-    printf("shuldartn\n");
     return FSUCCESS;
 }
 
@@ -102,7 +98,7 @@ struct Node **goto_last(struct Node **llnode) {
     if (llnode == NULL) return METHOD_FAILED;
     if ((*llnode) == NULL) return METHOD_FAILED;
     while ((**llnode).next != NULL) {
-        struct Node **err = goto_next(llnode);
+        struct Node **err = goto_next(&(*llnode));
         if (err==NULL) {
             break; 
             return METHOD_FAILED;
@@ -114,14 +110,18 @@ struct Node **goto_last(struct Node **llnode) {
 struct Node **goto_next(struct Node **llnode) {
     if (llnode == NULL) return METHOD_FAILED;
     if ((*llnode) == NULL) return METHOD_FAILED;
-    if ((**llnode).next != NULL) (*llnode) = (**llnode).next; else return METHOD_FAILED;
+    if ((**llnode).next != NULL) {
+        (*llnode) = (*llnode)->next;
+    } else return METHOD_FAILED;
     return llnode;
 }
 
 struct Node **goto_prev(struct Node **llnode) {
     if (llnode == NULL) return METHOD_FAILED;
     if ((*llnode) == NULL) return METHOD_FAILED;
-    if ((**llnode).prev != NULL) (*llnode) = (**llnode).prev; else return METHOD_FAILED;
+    if ((**llnode).prev != NULL) {
+        (*llnode) = (*llnode)->prev;
+    } else return METHOD_FAILED;
     return llnode;
 }
 
